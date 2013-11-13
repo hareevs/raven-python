@@ -29,7 +29,7 @@ setup_requires = [
 ]
 
 dev_requires = [
-    'flake8>=1.6,<2.0',
+    'flake8>=2.0,<2.1',
 ]
 
 unittest2_requires = ['unittest2']
@@ -93,7 +93,7 @@ class PyTest(TestCommand):
 
 setup(
     name='raven',
-    version='3.4.1',
+    version='3.5.2',
     author='David Cramer',
     author_email='dcramer@gmail.com',
     url='http://github.com/getsentry/raven-python',
