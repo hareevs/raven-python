@@ -194,24 +194,23 @@ def register_handlers():
     # Connect to Django's internal signal handler
     got_request_exception.connect(exception_handler, weak=False)
 
-    # If Celery is installed, register a signal handler
-    if 'djcelery' in django_settings.INSTALLED_APPS:
+    # register a signal handler
+    try:
+        # Celery < 2.5? is not supported
+        from raven.contrib.celery import (
+            register_signal, register_logger_signal)
+    except ImportError:
+        logger.exception('Failed to install Celery error handler')
+    else:
         try:
-            # Celery < 2.5? is not supported
-            from raven.contrib.celery import (
-                register_signal, register_logger_signal)
-        except ImportError:
+            register_signal(client)
+        except Exception:
             logger.exception('Failed to install Celery error handler')
-        else:
-            try:
-                register_signal(client)
-            except Exception:
-                logger.exception('Failed to install Celery error handler')
 
-            try:
-                register_logger_signal(client)
-            except Exception:
-                logger.exception('Failed to install Celery error handler')
+        try:
+            register_logger_signal(client)
+        except Exception:
+            logger.exception('Failed to install Celery error handler')
 
 
 def register_serializers():
